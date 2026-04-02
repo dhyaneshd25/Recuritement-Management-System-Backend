@@ -33,3 +33,8 @@ build/
 .vscode/
 resources/
 application.properties
+
+
+
+target/
+!target/*.jar
