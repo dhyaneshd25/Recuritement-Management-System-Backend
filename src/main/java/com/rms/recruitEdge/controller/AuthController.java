@@ -21,9 +21,9 @@ public class AuthController {
 
     @PostMapping("/register")
     public AuthResponse register(@RequestBody RegisterRequest request) {
-        System.out.println("checked......1");
+       
         AuthResponse res = authService.register(request);
-        System.out.println("completed......");
+       
         return res;
     }
 
@@ -32,5 +32,11 @@ public class AuthController {
     public AuthResponse login(@RequestBody LoginRequest request) {
 
         return authService.login(request);
+    }
+
+    @PostMapping("/googleLogin")
+    public AuthResponse googleLogin(@RequestBody String tokenId) throws Exception{
+
+        return authService.loginWithGoogle(tokenId);
     }
 }

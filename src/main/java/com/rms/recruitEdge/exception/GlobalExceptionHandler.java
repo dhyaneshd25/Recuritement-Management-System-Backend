@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    
+
+
     @ExceptionHandler(RuntimeException.class)
-    ResponseEntity<String> userNotFoundHandler(RuntimeException ex){
-        return ResponseEntity.status(404).body(ex.getMessage());
+    ResponseEntity<ExceptionMessage> userNotFoundHandler(RuntimeException ex){
+        return ResponseEntity.status(404).body(new ExceptionMessage(ex.getMessage()));
     }
 
     
