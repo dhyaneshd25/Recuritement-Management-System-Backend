@@ -34,7 +34,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of("http://localhost:3000")); // React app URL
+        config.setAllowedOrigins(List.of("http://localhost:3000","https://recruitment-management-system-front-two.vercel.app")); // React app URL
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
