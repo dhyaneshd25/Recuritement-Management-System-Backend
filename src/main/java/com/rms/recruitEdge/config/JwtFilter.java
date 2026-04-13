@@ -31,7 +31,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
     if (path.startsWith("/api/auth")) {
         filterChain.doFilter(request, response);
-        System.out.println("checked5.............");
         return;
     }    
                 
@@ -43,8 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = header.substring(7);
         
         String email = jwtUtil.extractEmail(token);
-        System.out.println("checked6............."+email);
-
+ 
             var userDetails = userDetailsService.loadUserByUsername(email);
 
             UsernamePasswordAuthenticationToken auth =
@@ -57,7 +55,6 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
-        System.out.println("checked......7");
         filterChain.doFilter(request, response);
     }
 }

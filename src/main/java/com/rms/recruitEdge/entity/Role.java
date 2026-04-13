@@ -3,7 +3,7 @@ package com.rms.recruitEdge.entity;
 public enum Role {
    
     ADMIN,
-    HR,
+    RECURITER,
     INTERVIEWER,
     CANDIDATE
     

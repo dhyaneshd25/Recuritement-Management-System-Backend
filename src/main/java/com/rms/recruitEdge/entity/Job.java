@@ -26,13 +26,20 @@ public class Job {
 
     private String description;
 
+    private String companyName;    
+
     private String location;
 
-    private int experience;
+    private String experience;
+
+    private JobType jobType;
 
     private String salaryRange;
 
-    private String status;
+    private JobStatus status;
 
     private String createdBy; 
+
+    private String color;
+
 }

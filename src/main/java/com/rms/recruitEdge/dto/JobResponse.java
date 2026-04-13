@@ -1,5 +1,8 @@
 package com.rms.recruitEdge.dto;
 
+import com.rms.recruitEdge.entity.JobStatus;
+import com.rms.recruitEdge.entity.JobType;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,14 +20,20 @@ public class JobResponse {
 
     private String description;
 
+    private String companyName;
+
     private String location;
 
-    private int experience;
+    private String experience;
+
+    private JobType jobType;
 
     private String salaryRange;
 
-    private String status;
-
     private String createdBy;
+
+    private String color;
+
+    private JobStatus status;
     
 }

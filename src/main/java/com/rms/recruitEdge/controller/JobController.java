@@ -1,6 +1,8 @@
 package com.rms.recruitEdge.controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rms.recruitEdge.dto.JobRequest;
 import com.rms.recruitEdge.dto.JobResponse;
 import com.rms.recruitEdge.dto.PageResponse;
+import com.rms.recruitEdge.entity.JobType;
 import com.rms.recruitEdge.service.JobService;
 
 @RestController
@@ -65,7 +68,7 @@ public class JobController {
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateJob(@PathVariable(name="id")String id,@RequestBody JobRequest req){
         if(jobService.update(id, req)){
-            return ResponseEntity.status(400).body("update successfully....");
+            return ResponseEntity.status(200).body("update successfully....");
         }
             return ResponseEntity.status(400).body("Enable to update....");
     }
@@ -77,5 +80,10 @@ public class JobController {
         }
             return ResponseEntity.status(400).body("Enable to delete....");
   
+    }
+
+    @GetMapping("/jobTypes")
+    public ResponseEntity<List<JobType>> getJobTypeList(){
+        return ResponseEntity.status(200).body(jobService.getJobTypes());
     }
 }

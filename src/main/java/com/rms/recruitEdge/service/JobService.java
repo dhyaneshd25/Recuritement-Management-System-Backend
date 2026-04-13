@@ -11,6 +11,7 @@ import com.rms.recruitEdge.dto.JobRequest;
 import com.rms.recruitEdge.dto.JobResponse;
 import com.rms.recruitEdge.dto.PageResponse;
 import com.rms.recruitEdge.entity.Job;
+import com.rms.recruitEdge.entity.JobType;
 import com.rms.recruitEdge.repository.JobRepository;
 
 @Service
@@ -101,7 +102,10 @@ public class JobService {
         if(req.getLocation()!=null){
             job.setLocation(req.getLocation());
         }
-        if(req.getExperience()>0){
+        if(req.getJobType()!=null){
+            job.setJobType(req.getJobType());
+        }
+        if(req.getExperience()!=null){
             job.setExperience(req.getExperience());
         }
         if(req.getSalaryRange()!=null){
@@ -132,6 +136,9 @@ public class JobService {
         return true;
     }
 
+    public List<JobType> getJobTypes(){
+        return List.of(JobType.values());
+    }
 
     // Mapper
     
@@ -141,10 +148,13 @@ public class JobService {
 
         newJob.setDescription(req.getDescription());
         newJob.setExperience(req.getExperience());
+        newJob.setCompanyName(req.getCompanyName());
         newJob.setCreatedBy(req.getCreatedBy());
         newJob.setJobTitle(req.getJobTitle());
         newJob.setLocation(req.getLocation());
+        newJob.setJobType(req.getJobType());
         newJob.setStatus(req.getStatus());
+        newJob.setColor(req.getColor());
         newJob.setSalaryRange(req.getSalaryRange());
 
         return newJob;
@@ -156,10 +166,13 @@ public class JobService {
         job.setId(req.getId());
         job.setDescription(req.getDescription());
         job.setExperience(req.getExperience());
+        job.setCompanyName(req.getCompanyName());
         job.setCreatedBy(req.getCreatedBy());
         job.setJobTitle(req.getJobTitle());
+        job.setJobType(req.getJobType());
         job.setLocation(req.getLocation());
         job.setStatus(req.getStatus());
+        job.setColor(req.getColor());
         job.setSalaryRange(req.getSalaryRange());
 
         return job;
