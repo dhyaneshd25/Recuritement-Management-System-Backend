@@ -12,19 +12,23 @@ import com.rms.recruitEdge.entity.Job;
 public interface JobRepository extends MongoRepository<Job, String> {
 
 
-    @Query("{ '$or': [ " +
+    @Query("{ " +
+           "  'createdBy': ?1, " +
+           "  '$or': [ " +
            "{ 'jobTitle': { $regex: ?0, $options: 'i' } }, " +
            "{ 'location': { $regex: ?0, $options: 'i' } }, " +
            "{ 'description': { $regex: ?0, $options: 'i' } } " +
            "] }")
-    Page<Job> searchJobs(String search, Pageable pageable);
+    Page<Job> searchJobs(String search, String createdBy, Pageable pageable);
 
 
 
-    @Query("{ '$or': [ " +
+    @Query("{ " +
+           "  'createdBy': ?1, " +
+           "  '$or': [ " +
            "{ 'jobTitle': { $regex: ?0, $options: 'i' } }, " +
            "{ 'location': { $regex: ?0, $options: 'i' } }, " +
            "{ 'description': { $regex: ?0, $options: 'i' } } " +
            "] }")
-    List<Job> searchJobsWithoutPagination(String search);
+    List<Job> searchJobsWithoutPagination(String search, String createdBy);
 }

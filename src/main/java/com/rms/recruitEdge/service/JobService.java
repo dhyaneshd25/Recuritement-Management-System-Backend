@@ -32,16 +32,16 @@ public class JobService {
     }
 
 
-    public PageResponse<JobResponse> getAll(Pageable pageable,String search,boolean fetchAll){
+    public PageResponse<JobResponse> getAll(Pageable pageable,String search,boolean fetchAll,String createdBy){
 
         List<Job> jobs;
 
         Page<Job> pages = null;
 
         if(fetchAll){
-            jobs = jobRepository.searchJobsWithoutPagination(search);
+            jobs = jobRepository.searchJobsWithoutPagination(search,createdBy);
         }else{
-            pages = jobRepository.searchJobs(search, pageable);
+            pages = jobRepository.searchJobs(search, createdBy, pageable);
             jobs = pages.getContent();
         }
 
