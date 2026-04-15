@@ -27,5 +27,7 @@ public class CandidateResponse {
     private String userId;
     private String name;
 
+    private String jobCreatedBy;
+
     private LocalDateTime createdAt;
 }

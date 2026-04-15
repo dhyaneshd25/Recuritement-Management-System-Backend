@@ -17,18 +17,22 @@ public interface CandidateRepository extends MongoRepository<Candidate, String> 
     List<Candidate> findByUserId(String userId);
 
  
-    @Query("{ '$or': [ " +
+    @Query("{ " +
+           "  'jobCreatedBy': ?1, " +
+           "  '$or': [ " +
            "{ 'userName': { $regex: ?0, $options: 'i' } }, " +
            "{ 'jobTitle': { $regex: ?0, $options: 'i' } }, " +
            "{ 'status': { $regex: ?0, $options: 'i' } } " +
            "] }")
-    List<Candidate> searchCandidatesWithoutPagination(String search);
+    List<Candidate> searchCandidatesWithoutPagination(String search, String jobCreatedBy);
 
 
-    @Query("{ '$or': [ " +
+    @Query("{ " +
+           "  'jobCreatedBy': ?1, " +
+           "  '$or': [ " +
            "{ 'userName': { $regex: ?0, $options: 'i' } }, " +
            "{ 'jobTitle': { $regex: ?0, $options: 'i' } }, " +
            "{ 'status': { $regex: ?0, $options: 'i' } } " +
            "] }")
-    Page<Candidate> searchCandidates(String search, Pageable pageable);
+    Page<Candidate> searchCandidates(String search, String jobCreatedBy, Pageable pageable);
 }

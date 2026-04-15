@@ -37,5 +37,8 @@ public class Candidate {
     private String userId;
     private String userName;
 
+    @Indexed
+    private String jobCreatedBy;
+
     private LocalDateTime createdAt;
 }

@@ -37,16 +37,16 @@ public class CandidateService {
         return toCandidateResponse(saveCandidate);
     }
 
-    public PageResponse<CandidateResponse> getAll(Pageable pageable,String search,boolean fetchAll){
+    public PageResponse<CandidateResponse> getAll(Pageable pageable,String search,boolean fetchAll, String jobCreatedBy){
 
         List<Candidate> candidates;
 
         Page<Candidate> pages = null;
 
         if(fetchAll){
-            candidates = candidateRepository.searchCandidatesWithoutPagination(search);
+            candidates = candidateRepository.searchCandidatesWithoutPagination(search, jobCreatedBy);
         }else{
-            pages = candidateRepository.searchCandidates(search, pageable);
+            pages = candidateRepository.searchCandidates(search, jobCreatedBy, pageable);
             candidates = pages.getContent();
         }
 
@@ -108,6 +108,7 @@ public class CandidateService {
 
             candidate.setJobId(job.getId());
             candidate.setJobTitle(job.getJobTitle());
+            candidate.setJobCreatedBy(job.getCreatedBy());
 
         }
         if(req.getUserId()!=null){
@@ -117,6 +118,9 @@ public class CandidateService {
 
             candidate.setUserId(user.getId());
             candidate.setUserName(user.getName());
+        }
+        if(req.getStatus()!=null){
+            candidate.setStatus(req.getStatus());
         }
         
 
@@ -166,6 +170,7 @@ public class CandidateService {
         candidate.setCreatedAt(LocalDateTime.now());
         candidate.setUserId(user.getId());
         candidate.setUserName(user.getName());
+        candidate.setJobCreatedBy(job.getCreatedBy());
 
         return candidate;
 
@@ -185,6 +190,7 @@ public class CandidateService {
         res.setUserId(candidate.getUserId());
         res.setName(candidate.getUserName());
         res.setCreatedAt(candidate.getCreatedAt());
+        res.setJobCreatedBy(candidate.getJobCreatedBy());
 
         return res;
     }

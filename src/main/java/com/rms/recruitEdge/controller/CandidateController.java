@@ -38,9 +38,10 @@ public class CandidateController {
 
     @GetMapping("/get")
     public ResponseEntity<PageResponse<CandidateResponse>> getAllCandiate(
-         @RequestParam(defaultValue="-1",name="page") int page,
+        @RequestParam(defaultValue="-1",name="page") int page,
         @RequestParam(defaultValue="10",name="size") int size,
-        @RequestParam(defaultValue="",name="search") String search
+        @RequestParam(defaultValue="",name="search") String search,
+        @RequestParam(name="jobCreatedBy", required = true) String jobCreatedBy
     ) {
         boolean fetchAll = (page == 0 && size == 10);
 
@@ -52,7 +53,7 @@ public class CandidateController {
             pageableObj = PageRequest.of(page-1,size);
         }
 
-        return ResponseEntity.status(200).body(candidateService.getAll(pageableObj,search,fetchAll));
+        return ResponseEntity.status(200).body(candidateService.getAll(pageableObj,search,fetchAll,jobCreatedBy));
     }
 
     @GetMapping("/get/{id}")
@@ -70,7 +71,7 @@ public class CandidateController {
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateCandidate(@PathVariable(name="id")String id,@RequestBody CandidateRequest req){
         if(candidateService.update(id, req)){
-            return ResponseEntity.status(400).body("update successfully....");
+            return ResponseEntity.status(200).body("update successfully....");
         }
             return ResponseEntity.status(400).body("Enable to update....");
     }
