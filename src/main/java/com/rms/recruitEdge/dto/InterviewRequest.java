@@ -3,6 +3,8 @@ package com.rms.recruitEdge.dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.rms.recruitEdge.entity.InterviewStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,5 +32,5 @@ public class InterviewRequest {
 
     private String feedback;
 
-
+    private InterviewStatus status;
 }

@@ -45,4 +45,7 @@ public class Interview {
     private String feedback;
 
     private InterviewStatus status;
+
+    @Indexed
+    private String candidateCreatedBy;
 }

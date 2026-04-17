@@ -37,4 +37,6 @@ public class InterviewResponse {
     private String feedback;
 
     private String status;
+
+    private String candidateCreatedBy;
 }

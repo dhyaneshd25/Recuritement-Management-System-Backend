@@ -39,16 +39,16 @@ public class InterviewService {
         return toInterviewResponse(saveInterview);
     }
 
-    public PageResponse<InterviewResponse> getAll(Pageable pageable,String search,boolean fetchAll){
+    public PageResponse<InterviewResponse> getAll(Pageable pageable,String search,boolean fetchAll,String candidateCreatedBy){
 
         List<Interview> interviews;
 
         Page<Interview> pages = null;
 
         if(fetchAll){
-            interviews = interviewRepository.searchInterviewWithoutPagination(search);
+            interviews = interviewRepository.searchInterviewWithoutPagination(search, candidateCreatedBy);
         }else{
-            pages = interviewRepository.searchInterview(search, pageable);
+            pages = interviewRepository.searchInterview(search, candidateCreatedBy, pageable);
             interviews = pages.getContent();
         }
 
@@ -103,6 +103,7 @@ public class InterviewService {
 
             interview.setCandidateId(candidate.getId());
             interview.setCandidateName(candidate.getUserName());
+            interview.setCandidateCreatedBy(candidate.getJobCreatedBy());
 
         }
         if(req.getInterviewerId()!=null){
@@ -136,6 +137,10 @@ public class InterviewService {
 
         if(req.getFeedback()!=null){
             req.setFeedback(req.getFeedback());
+        }
+
+        if(req.getStatus()!=null){
+            interview.setStatus(req.getStatus());
         }
 
         interviewRepository.save(interview);
@@ -189,6 +194,7 @@ public class InterviewService {
         interview.setMeetingLink(request.getMeetingLink());
         interview.setMode(request.getMode());
         interview.setFeedback(request.getFeedback());
+        interview.setCandidateCreatedBy(candidate.getJobCreatedBy());
 
 
         return interview;
@@ -200,7 +206,7 @@ public class InterviewService {
         InterviewResponse res = new InterviewResponse();
 
         res.setId(interview.getId());
-        res.setCandidateId(interview.getId());
+        res.setCandidateId(interview.getCandidateId());
         res.setCandidateName(interview.getCandidateName());
         res.setInterviewerId(interview.getInterviewerId());
         res.setInterviewerName(interview.getInterviewerName());
@@ -211,6 +217,7 @@ public class InterviewService {
         res.setMeetingLink(interview.getMeetingLink());
         res.setFeedback(interview.getFeedback());
         res.setStatus(interview.getStatus().name());
+        res.setCandidateCreatedBy(interview.getCandidateCreatedBy());
 
         return res;
     }

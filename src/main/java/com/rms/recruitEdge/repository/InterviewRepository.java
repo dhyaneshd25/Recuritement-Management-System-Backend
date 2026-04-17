@@ -12,7 +12,9 @@ import com.rms.recruitEdge.entity.Interview;
 public interface InterviewRepository extends MongoRepository<Interview, String> {
 
   
-    @Query("{ '$or': [ " +
+    @Query("{ " +
+           "  'candidateCreatedBy': ?1, " +
+           "  '$or': [ " +
            "{ 'candidateName': { $regex: ?0, $options: 'i' } }, " +
            "{ 'candidateId': { $regex: ?0, $options: 'i' } }, " +
 
@@ -24,11 +26,13 @@ public interface InterviewRepository extends MongoRepository<Interview, String> 
 
            "{ 'interviewDate': { $regex: ?0, $options: 'i' } } " +
            "] }")
-    List<Interview> searchInterviewWithoutPagination(String search);
+    List<Interview> searchInterviewWithoutPagination(String search, String candidateCreatedBy);
 
 
     
-    @Query("{ '$or': [ " +
+    @Query("{ " +
+           "  'candidateCreatedBy': ?1, " +
+           "  '$or': [ " +
            "{ 'candidateName': { $regex: ?0, $options: 'i' } }, " +
            "{ 'candidateId': { $regex: ?0, $options: 'i' } }, " +
 
@@ -40,5 +44,5 @@ public interface InterviewRepository extends MongoRepository<Interview, String> 
 
            "{ 'interviewDate': { $regex: ?0, $options: 'i' } } " +
            "] }")
-    Page<Interview> searchInterview(String search, Pageable pageable);
+    Page<Interview> searchInterview(String search, String candidateCreatedBy, Pageable pageable);
 }

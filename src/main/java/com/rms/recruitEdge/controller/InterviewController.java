@@ -38,9 +38,10 @@ public class InterviewController {
 
     @GetMapping("/get")
     public ResponseEntity<PageResponse<InterviewResponse>> getAllCandiate(
-         @RequestParam(defaultValue="-1",name="page") int page,
+        @RequestParam(defaultValue="-1",name="page") int page,
         @RequestParam(defaultValue="10",name="size") int size,
-        @RequestParam(defaultValue="",name="search") String search
+        @RequestParam(defaultValue="",name="search") String search,
+        @RequestParam(name="candidateCreatedBy", required = true) String candidateCreatedBy
     ) {
         boolean fetchAll = (page == 0 && size == 10);
 
@@ -52,7 +53,7 @@ public class InterviewController {
             pageableObj = PageRequest.of(page-1,size);
         }
 
-        return ResponseEntity.status(200).body(interviewService.getAll(pageableObj,search,fetchAll));
+        return ResponseEntity.status(200).body(interviewService.getAll(pageableObj,search,fetchAll,candidateCreatedBy));
     }
 
     @GetMapping("/get/{id}")
@@ -70,7 +71,7 @@ public class InterviewController {
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateInterview(@PathVariable(name="id")String id,@RequestBody InterviewRequest req){
         if(interviewService.update(id, req)){
-            return ResponseEntity.status(400).body("update successfully....");
+            return ResponseEntity.status(200).body("update successfully....");
         }
             return ResponseEntity.status(400).body("Enable to update....");
     }
