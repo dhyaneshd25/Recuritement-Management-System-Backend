@@ -11,7 +11,23 @@ import com.rms.recruitEdge.entity.Interview;
 
 public interface InterviewRepository extends MongoRepository<Interview, String> {
 
-  
+    @Query("{ " +
+           "  'candidateUserId': ?1, " +
+           "  '$or': [ " +
+           "{ 'candidateName': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'candidateId': { $regex: ?0, $options: 'i' } }, " +
+
+           "{ 'interviewerName': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'interviewerId': { $regex: ?0, $options: 'i' } }, " +
+
+           "{ 'mode': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'status': { $regex: ?0, $options: 'i' } }, " +
+
+           "{ 'interviewDate': { $regex: ?0, $options: 'i' } } " +
+           "] }")
+    List<Interview> sfInterviewUsingCandidateUserId(String search, String candidateUserId);
+       
+
     @Query("{ " +
            "  'candidateCreatedBy': ?1, " +
            "  '$or': [ " +

@@ -74,6 +74,23 @@ public class JobService {
 
     }
 
+    public PageResponse<JobResponse>  getA(){
+
+        List<Job> jobs = jobRepository.findAll();
+
+        PageResponse<JobResponse> res = new PageResponse<>();
+
+        res.setData(jobs.stream().map(this::toJobResponse).toList());
+
+        res.setCurrentpage(1);
+
+        res.setTotalElements(jobs.size());
+
+        res.setTotalPages(1);
+
+        return res;
+    }
+    
     public JobResponse getById(String id){
 
         Job job  = jobRepository.findById(id).orElse(null);

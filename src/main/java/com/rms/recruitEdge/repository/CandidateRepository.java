@@ -14,8 +14,26 @@ public interface CandidateRepository extends MongoRepository<Candidate, String> 
     
     List<Candidate> findByJobId(String jobId);
 
-    List<Candidate> findByUserId(String userId);
+    Page<Candidate> findByUserId(String userId, Pageable pageable);
 
+    @Query("{ " +
+           "  'userId': ?1, " +
+           "  '$or': [ " +
+           "{ 'userName': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'jobTitle': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'status': { $regex: ?0, $options: 'i' } } " +
+           "] }")
+    Page<Candidate> sfByCandidatesUserId(String search, String UserId, Pageable pageable);
+
+
+    @Query("{ " +
+           "  'userId': ?1, " +
+           "  '$or': [ " +
+           "{ 'userName': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'jobTitle': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'status': { $regex: ?0, $options: 'i' } } " +
+           "] }")
+    List<Candidate> sfByCandidatesUserIdWithoutPagination(String search, String UserId);
  
     @Query("{ " +
            "  'jobCreatedBy': ?1, " +
@@ -35,4 +53,5 @@ public interface CandidateRepository extends MongoRepository<Candidate, String> 
            "{ 'status': { $regex: ?0, $options: 'i' } } " +
            "] }")
     Page<Candidate> searchCandidates(String search, String jobCreatedBy, Pageable pageable);
+
 }

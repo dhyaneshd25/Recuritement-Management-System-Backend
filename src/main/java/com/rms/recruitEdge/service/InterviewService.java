@@ -77,6 +77,24 @@ public class InterviewService {
 
     }
 
+    public PageResponse<InterviewResponse> getAllByCandidateUserId(String search, String candidateUserId){
+
+        List<Interview> data = interviewRepository.sfInterviewUsingCandidateUserId(search, candidateUserId);
+
+        PageResponse<InterviewResponse> res = new PageResponse<>();
+
+        res.setData(data.stream().map(this::toInterviewResponse).toList());
+
+        res.setCurrentpage(1);
+
+        res.setTotalElements(data.size());
+
+        res.setTotalPages(1);
+
+        return res;
+
+    }
+
     public InterviewResponse getById(String id){
 
         Interview interview = interviewRepository.findById(id).orElse(null);
@@ -104,7 +122,8 @@ public class InterviewService {
             interview.setCandidateId(candidate.getId());
             interview.setCandidateName(candidate.getUserName());
             interview.setCandidateCreatedBy(candidate.getJobCreatedBy());
-
+            interview.setJobTitle(candidate.getJobTitle());
+            interview.setCandidateUserId(candidate.getUserId());
         }
         if(req.getInterviewerId()!=null){
 
@@ -186,6 +205,8 @@ public class InterviewService {
         interview.setStatus(InterviewStatus.SCHEDULED);
         interview.setCandidateId(candidate.getId());
         interview.setCandidateName(candidate.getUserName());
+        interview.setJobTitle(candidate.getJobTitle());
+        interview.setCandidateUserId(candidate.getUserId());
         interview.setInterviewerId(user.getId());
         interview.setInterviewerName(user.getName());
         interview.setInterviewDate(request.getInterviewDate());
@@ -208,6 +229,8 @@ public class InterviewService {
         res.setId(interview.getId());
         res.setCandidateId(interview.getCandidateId());
         res.setCandidateName(interview.getCandidateName());
+        res.setCandidateUserId(interview.getCandidateUserId());
+        res.setJobTitle(interview.getJobTitle());
         res.setInterviewerId(interview.getInterviewerId());
         res.setInterviewerName(interview.getInterviewerName());
         res.setInterviewDate(interview.getInterviewDate());

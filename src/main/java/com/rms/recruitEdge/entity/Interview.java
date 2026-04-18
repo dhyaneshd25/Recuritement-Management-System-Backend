@@ -29,10 +29,13 @@ public class Interview {
     private String candidateId;
     private String candidateName;
 
+    private String candidateUserId;
    
     @Indexed
     private String interviewerId;
     private String interviewerName;
+
+    private String jobTitle;
 
     private LocalDate interviewDate;
     private LocalTime interviewTime;

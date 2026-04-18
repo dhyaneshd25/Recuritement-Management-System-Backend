@@ -40,7 +40,7 @@ public class UserController {
         @RequestParam(defaultValue="0",name="page") int page,
         @RequestParam(defaultValue="10",name="size") int size,
         @RequestParam(defaultValue="",name="search") String search,
-        @RequestParam(name="createdBy",required = true) String createdBy
+        @RequestParam(defaultValue="",name="createdBy",required = false) String createdBy
     ){
         boolean fetchAll = (page == 0 && size == 10);
 

@@ -22,6 +22,8 @@ public interface JobRepository extends MongoRepository<Job, String> {
     Page<Job> searchJobs(String search, String createdBy, Pageable pageable);
 
 
+    
+
 
     @Query("{ " +
            "  'createdBy': ?1, " +

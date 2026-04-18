@@ -79,6 +79,35 @@ public class CandidateService {
 
     }
 
+    public PageResponse<CandidateResponse> getAllByUserId(String search,String userId, Pageable pagable){
+      
+        // Page<Candidate> data = candidateRepository.sfByCandidatesUserId(search,userId,pagable);
+
+        // PageResponse<CandidateResponse> res = new PageResponse<>();
+
+        // res.setData(data.getContent().stream().map(this::toCandidateResponse).toList());
+
+        // res.setCurrentpage(data.getNumber()+1);
+        
+        // res.setTotalElements(data.getTotalElements());
+        
+        // res.setTotalPages(data.getTotalPages());
+
+        List<Candidate> data = candidateRepository.sfByCandidatesUserIdWithoutPagination(search, userId);
+
+        PageResponse<CandidateResponse> res = new PageResponse<>();
+
+        res.setData(data.stream().map(this::toCandidateResponse).toList());
+
+        res.setCurrentpage(1);
+
+        res.setTotalElements(data.size());
+
+        res.setTotalPages(1);
+
+        return res;
+    }
+
     public CandidateResponse getById(String id){
 
         Candidate candidate = candidateRepository.findById(id).orElse(null);

@@ -20,6 +20,10 @@ public class InterviewResponse {
     
     private String candidateName;
 
+    private String candidateUserId;
+
+    private String jobTitle;
+
     private String interviewerId;
 
     private String interviewerName;

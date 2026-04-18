@@ -40,7 +40,7 @@ public class JobController {
         @RequestParam(defaultValue="0",name="page") int page,
         @RequestParam(defaultValue="10",name="size") int size,
         @RequestParam(defaultValue="",name="search") String search,
-        @RequestParam(name="createdBy",required = true) String createdBy
+        @RequestParam(defaultValue="",name="createdBy",required = false) String createdBy
     ){
         boolean fetchAll = (page == 0 && size == 10);
 
@@ -55,6 +55,12 @@ public class JobController {
         return ResponseEntity.status(200).body(jobService.getAll(pageableObj,search,fetchAll,createdBy));
     }
 
+
+    @GetMapping("/getA")
+    public ResponseEntity<PageResponse<JobResponse>> getAll(){
+        return ResponseEntity.status(200).body(jobService.getA());
+    }
+    
     @GetMapping("/get/{id}")
     public ResponseEntity<JobResponse> getJobById(@PathVariable(name="id")String id){
 
