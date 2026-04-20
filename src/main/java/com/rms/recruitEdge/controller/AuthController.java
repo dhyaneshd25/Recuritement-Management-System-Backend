@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rms.recruitEdge.dto.AuthResponse;
+import com.rms.recruitEdge.dto.GoogleLoginRequest;
 import com.rms.recruitEdge.dto.LoginRequest;
 import com.rms.recruitEdge.dto.RegisterRequest;
 import com.rms.recruitEdge.service.AuthService;
@@ -35,8 +36,8 @@ public class AuthController {
     }
 
     @PostMapping("/googleLogin")
-    public AuthResponse googleLogin(@RequestBody String tokenId) throws Exception{
+    public AuthResponse googleLogin(@RequestBody GoogleLoginRequest req) throws Exception{
 
-        return authService.loginWithGoogle(tokenId);
+        return authService.loginWithGoogle(req);
     }
 }

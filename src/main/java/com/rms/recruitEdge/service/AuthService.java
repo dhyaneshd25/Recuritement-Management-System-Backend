@@ -22,6 +22,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.rms.recruitEdge.config.JwtUtil;
 import com.rms.recruitEdge.dto.AuthResponse;
+import com.rms.recruitEdge.dto.GoogleLoginRequest;
 import com.rms.recruitEdge.dto.LoginRequest;
 import com.rms.recruitEdge.dto.RegisterRequest;
 import com.rms.recruitEdge.dto.UserDto;
@@ -84,12 +85,12 @@ public class AuthService {
     }
 
 
-    public AuthResponse loginWithGoogle(String idToken) throws Exception {
+    public AuthResponse loginWithGoogle(GoogleLoginRequest req) throws Exception {
 
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(idToken);  // sends "Authorization: Bearer <token>"
+        headers.setBearerAuth(req.getToken());  // sends "Authorization: Bearer <token>"
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         ResponseEntity<Map> response = restTemplate.exchange(
@@ -113,7 +114,7 @@ public class AuthService {
             User newUser = new User();
             newUser.setEmail(email);
             newUser.setName(name);
-            newUser.setRole(Role.CANDIDATE);
+            newUser.setRole(req.getRole());
             return userRepository.save(newUser);
         });
 
