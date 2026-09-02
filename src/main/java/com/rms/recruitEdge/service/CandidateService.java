@@ -12,9 +12,11 @@ import com.rms.recruitEdge.dto.CandidateResponse;
 import com.rms.recruitEdge.dto.PageResponse;
 import com.rms.recruitEdge.entity.Candidate;
 import com.rms.recruitEdge.entity.CandidateStatus;
+import com.rms.recruitEdge.entity.Interview;
 import com.rms.recruitEdge.entity.Job;
 import com.rms.recruitEdge.entity.User;
 import com.rms.recruitEdge.repository.CandidateRepository;
+import com.rms.recruitEdge.repository.InterviewRepository;
 import com.rms.recruitEdge.repository.JobRepository;
 import com.rms.recruitEdge.repository.UserRepository;
 
@@ -27,6 +29,8 @@ public class CandidateService {
     private final CandidateRepository candidateRepository;
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
+    private final InterviewRepository interviewRepository;
+
 
     public CandidateResponse create(CandidateRequest request) {
     
@@ -123,6 +127,8 @@ public class CandidateService {
 
         Candidate  candidate = candidateRepository.findById(id).orElse(null);
 
+        Interview interview = interviewRepository.findBycandidateId(id).orElse(null);
+    
         if(candidate==null){
             return false;
         }
@@ -139,6 +145,10 @@ public class CandidateService {
             candidate.setJobTitle(job.getJobTitle());
             candidate.setJobCreatedBy(job.getCreatedBy());
 
+            if(interview!=null){
+                interview.setJobTitle(job.getJobTitle());
+            }
+
         }
         if(req.getUserId()!=null){
 
@@ -147,11 +157,19 @@ public class CandidateService {
 
             candidate.setUserId(user.getId());
             candidate.setUserName(user.getName());
+
+            if(interview!=null){
+              interview.setCandidateName(user.getName());
+              interview.setCandidateUserId(user.getId());   
+            }
         }
         if(req.getStatus()!=null){
             candidate.setStatus(req.getStatus());
         }
         
+        if(interview!=null){
+            interviewRepository.save(interview);
+        }
 
         candidateRepository.save(candidate);
 
@@ -173,11 +191,14 @@ public class CandidateService {
     public boolean delete(String id){
 
         Candidate candidate = candidateRepository.findById(id).orElse(null);
-
+        Interview interview = interviewRepository.findBycandidateId(id).orElse(null);
         if(candidate==null){
             return false;
         }
 
+        if(interview!=null){
+            interviewRepository.delete(interview);
+        }
         candidateRepository.delete(candidate);
 
         return true;

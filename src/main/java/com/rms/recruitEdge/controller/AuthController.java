@@ -28,6 +28,11 @@ public class AuthController {
         return res;
     }
 
+    @PostMapping("/googleRegister")
+    public AuthResponse googleRegister(@RequestBody GoogleLoginRequest req) throws Exception{
+
+        return authService.registerWithGoogle(req);
+    }   
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody LoginRequest request) {

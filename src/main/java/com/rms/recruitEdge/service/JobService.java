@@ -10,8 +10,12 @@ import org.springframework.stereotype.Service;
 import com.rms.recruitEdge.dto.JobRequest;
 import com.rms.recruitEdge.dto.JobResponse;
 import com.rms.recruitEdge.dto.PageResponse;
+import com.rms.recruitEdge.entity.Candidate;
+import com.rms.recruitEdge.entity.Interview;
 import com.rms.recruitEdge.entity.Job;
 import com.rms.recruitEdge.entity.JobType;
+import com.rms.recruitEdge.repository.CandidateRepository;
+import com.rms.recruitEdge.repository.InterviewRepository;
 import com.rms.recruitEdge.repository.JobRepository;
 
 @Service
@@ -19,6 +23,12 @@ public class JobService {
     
     @Autowired
     private JobRepository jobRepository;
+
+    @Autowired
+    private CandidateRepository candidateRepository;
+
+    @Autowired
+    private InterviewRepository interviewRepository; 
 
     public JobResponse create(JobRequest req){
        
@@ -110,7 +120,21 @@ public class JobService {
             return false;
         }
 
+
         if(req.getJobTitle()!=null){
+
+            List<Candidate> candidateList = candidateRepository.findByJobId(id);
+
+            for(Candidate c:candidateList){
+                c.setJobTitle(req.getJobTitle());
+                Interview i = interviewRepository.findBycandidateId(c.getId()).orElse(null);
+                if(i!=null){
+                    i.setJobTitle(req.getJobTitle());
+                    interviewRepository.save(i);
+                }
+                candidateRepository.save(c);
+            }
+
             job.setJobTitle(req.getJobTitle());
         }
         if(req.getDescription()!=null){
@@ -147,6 +171,16 @@ public class JobService {
         if(job==null){
             return false;
         }
+
+        List<Candidate> candidateList = candidateRepository.findByJobId(id);
+
+        for(Candidate c:candidateList){
+            Interview i = interviewRepository.findBycandidateId(c.getId()).orElse(null);
+            if(i!=null){
+              interviewRepository.delete(i);
+            }
+            candidateRepository.delete(c);
+        }        
 
         jobRepository.delete(job);
 

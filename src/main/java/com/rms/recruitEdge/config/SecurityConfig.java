@@ -50,16 +50,15 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/auth/googleLogin","/api/auth/login", "/api/auth/register").permitAll()
+                    .requestMatchers("/api/auth/googleLogin","/api/auth/login", "/api/auth/googleRegister", "/api/auth/register").permitAll()
                     .anyRequest().authenticated()
             )
             .sessionManagement(session ->
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             );
-
-        System.out.println("checked......3");    
+  
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-        System.out.println("checked......4");
+
         return http.build();
     }
 

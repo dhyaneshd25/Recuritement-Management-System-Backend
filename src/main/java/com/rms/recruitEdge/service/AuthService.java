@@ -61,31 +61,7 @@ public class AuthService {
         return new AuthResponse(token,new UserDto(user.getId(), user.getEmail(), user.getName(), user.getRole().name()));
     }
 
-
-    public AuthResponse login(LoginRequest request) {
-
-         try {
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-
-    } catch (Exception e) {
-        throw new RuntimeException("Invalid email or password");
-    }
-
-        String token = jwtUtil.generateToken(request.getEmail());
-
-        User user = userRepository.findByEmail(request.getEmail()).get();
-
-        return new AuthResponse(token,new UserDto(user.getId(), user.getEmail(), user.getName(), user.getRole().name()));
-    }
-
-
-    public AuthResponse loginWithGoogle(GoogleLoginRequest req) throws Exception {
+    public AuthResponse registerWithGoogle(GoogleLoginRequest req) throws Exception {
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -110,13 +86,75 @@ public class AuthService {
         String name     = (String) userInfo.get("name");
 
 
-        User user = userRepository.findByEmail(email).orElseGet(() -> {
-            User newUser = new User();
-            newUser.setEmail(email);
-            newUser.setName(name);
-            newUser.setRole(req.getRole());
-            return userRepository.save(newUser);
-        });
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if(user!=null){
+            throw new RuntimeException("Account already exists...signin  using this email id....");
+        }
+
+
+        User newUser = new User();
+        newUser.setEmail(email);
+        newUser.setName(name);
+        newUser.setRole(req.getRole());
+        userRepository.save(newUser);
+
+        String jwt = jwtUtil.generateToken(newUser.getEmail());
+
+        UserDto userDTO = new UserDto(newUser.getId(), newUser.getEmail(), newUser.getName(), newUser.getRole().name());
+        return new AuthResponse(jwt, userDTO);
+    }
+        
+    public AuthResponse login(LoginRequest request) {
+
+         try {
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+
+    } catch (Exception e) {
+        throw new RuntimeException("Invalid email or password");
+    }
+
+        String token = jwtUtil.generateToken(request.getEmail());
+
+        User user = userRepository.findByEmail(request.getEmail()).get();
+
+        return new AuthResponse(token,new UserDto(user.getId(), user.getEmail(), user.getName(), user.getRole().name()));
+    }
+
+    public AuthResponse loginWithGoogle(GoogleLoginRequest req) throws Exception {
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(req.getToken());  // sends "Authorization: Bearer <token>"
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<Map> response = restTemplate.exchange(
+            "https://www.googleapis.com/oauth2/v3/userinfo",
+            HttpMethod.GET,
+            entity,
+            Map.class
+        );
+
+        if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
+            throw new RuntimeException("Failed to fetch user info from Google");
+        }
+
+        
+       
+        Map<String, Object> userInfo = response.getBody();
+        String email    = (String) userInfo.get("email");
+        String name     = (String) userInfo.get("name");
+
+
+        User user = userRepository.findByEmail(email).orElseThrow(() ->  new RuntimeException("User does not exist...signup using this email id....")
+        );
 
         String jwt = jwtUtil.generateToken(user.getEmail());
 
