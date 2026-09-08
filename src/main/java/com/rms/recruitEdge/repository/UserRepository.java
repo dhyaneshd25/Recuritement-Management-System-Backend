@@ -19,23 +19,27 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     List<User> findByRole(Role role);
 
-    @Query("{ " +
-           "  'createdBy': ?1, " +
-           "  '$or': [ " +
-           "{ 'UserTitle': { $regex: ?0, $options: 'i' } }, " +
-           "{ 'location': { $regex: ?0, $options: 'i' } }, " +
-           "{ 'description': { $regex: ?0, $options: 'i' } } " +
-           "] }")
-    Page<User> searchUsers(String search, String createdBy, Pageable pageable);
+    @Query("""
+      {
+  "$or": [
+    { "name": { "$regex": ?0, "$options": "i" } },
+    { "email": { "$regex": ?0, "$options": "i" } },
+     { "role": { "$regex": ?0, "$options": "i" } }
+  ]
+}
+       """)
+    Page<User> searchUsers(String search, Pageable pageable);
 
 
 
-    @Query("{ " +
-           "  'createdBy': ?1, " +
-           "  '$or': [ " +
-           "{ 'UserTitle': { $regex: ?0, $options: 'i' } }, " +
-           "{ 'location': { $regex: ?0, $options: 'i' } }, " +
-           "{ 'description': { $regex: ?0, $options: 'i' } } " +
-           "] }")
-    List<User> searchUsersWithoutPagination(String search, String createdBy);
+    @Query("""
+      {
+  "$or": [
+    { "name": { "$regex": ?0, "$options": "i" } },
+    { "email": { "$regex": ?0, "$options": "i" } },
+     { "role": { "$regex": ?0, "$options": "i" } }
+  ]
+}
+       """)
+    List<User> searchUsersWithoutPagination(String search);
 }

@@ -1,11 +1,14 @@
 package com.rms.recruitEdge.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.rms.recruitEdge.dto.UserRequest;
 import com.rms.recruitEdge.dto.UserResponse;
@@ -21,6 +24,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public UserResponse create(UserRequest req){
        
         User newUser = toEntity(req);
@@ -32,16 +38,16 @@ public class UserService {
         return res;
     }
 
-    public PageResponse<UserResponse> getAll(Pageable pageable,String search,boolean fetchAll,String createdBy){
+    public PageResponse<UserResponse> getAll(Pageable pageable,String search,boolean fetchAll){
 
         List<User> users;
 
         Page<User> pages = null;
 
         if(fetchAll){
-            users = userRepository.searchUsersWithoutPagination(search,createdBy);
+            users = userRepository.searchUsersWithoutPagination(search);
         }else{
-            pages = userRepository.searchUsers(search, createdBy, pageable);
+            pages = userRepository.searchUsers(search, pageable);
             users = pages.getContent();
         }
 
@@ -93,8 +99,18 @@ public class UserService {
             return false;
         }
 
-       
-
+        if(req.getName()!=null){
+            user.setName(req.getName());
+        }
+        if(req.getEmail()!=null){
+            user.setEmail(req.getEmail());
+        }       
+        if(req.getRole()!=null){
+            user.setRole(req.getRole());
+        }
+        if(req.getPassword()!=null){
+            user.setPassword(passwordEncoder.encode(req.getPassword()));
+        }        
         userRepository.save(user);
 
         return true;
@@ -115,6 +131,21 @@ public class UserService {
 
     public List<UserDto> getAllUserByRole(Role role){
         return userRepository.findByRole(role).stream().map(u -> toUserToDto(u)).toList();
+    }
+
+    public Map<Role,Integer> roleUserCount(){
+
+        List<User> users = userRepository.findAll();
+        Map<Role,Integer> mp = new HashMap<>();
+
+        for(Role role : Role.values()){
+            mp.put(role,0);
+        }
+
+        for(User u : users){
+            mp.put(u.getRole(),mp.getOrDefault(u.getRole(), 1)+1);
+        }
+        return mp;
     }
     // Mapper
     

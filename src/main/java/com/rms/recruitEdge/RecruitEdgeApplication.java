@@ -18,12 +18,12 @@ public class RecruitEdgeApplication {
 	}
 
 	@Value("${spring.data.mongodb.uri}")
-private String mongoUri;
+    private String mongoUri;
 
-@PostConstruct
-public void printUri() {
-    System.out.println("Mongo URI: " + mongoUri);
-}
+    @PostConstruct
+    public void printUri() {
+        System.out.println("Mongo URI: " + mongoUri);
+    }
     @Bean
     public MongoClient mongoClient() {
         return MongoClients.create(mongoUri);

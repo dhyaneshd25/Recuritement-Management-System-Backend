@@ -1,6 +1,8 @@
 package com.rms.recruitEdge.controller;
 
 import java.util.List;
+import java.util.Map;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -39,8 +41,7 @@ public class UserController {
     public ResponseEntity<PageResponse<UserResponse>> getAllUsers(
         @RequestParam(defaultValue="0",name="page") int page,
         @RequestParam(defaultValue="10",name="size") int size,
-        @RequestParam(defaultValue="",name="search") String search,
-        @RequestParam(defaultValue="",name="createdBy",required = false) String createdBy
+        @RequestParam(defaultValue="",name="search") String search
     ){
         boolean fetchAll = (page == 0 && size == 10);
 
@@ -52,7 +53,7 @@ public class UserController {
             pageableObj = PageRequest.of(page-1,size);
         }
 
-        return ResponseEntity.status(200).body(userService.getAll(pageableObj,search,fetchAll,createdBy));
+        return ResponseEntity.status(200).body(userService.getAll(pageableObj,search,fetchAll));
     }
 
     @GetMapping("/get/{id}")
@@ -87,5 +88,11 @@ public class UserController {
     public ResponseEntity<List<UserDto>> getUsersByRole(@RequestParam(name="role", required = true) Role role){
         return ResponseEntity.status(200).body(userService.getAllUserByRole(role));
     }
+
+    @GetMapping("/roleUserCount")
+    public ResponseEntity<Map<Role,Integer>> getRoleUserCount(){
+        return ResponseEntity.status(200).body(userService.roleUserCount());
+    }
+
 }
 
