@@ -41,7 +41,8 @@ public class CandidateController {
         @RequestParam(defaultValue="-1",name="page") int page,
         @RequestParam(defaultValue="10",name="size") int size,
         @RequestParam(defaultValue="",name="search") String search,
-        @RequestParam(defaultValue="",name="jobCreatedBy", required = false) String jobCreatedBy
+        @RequestParam(defaultValue="",name="jobCreatedBy", required = false) String jobCreatedBy,
+        @RequestParam(defaultValue="true",name="isAdmin",required = false) boolean isAdmin
     ) {
         boolean fetchAll = (page == 0 && size == 10);
 
@@ -53,7 +54,7 @@ public class CandidateController {
             pageableObj = PageRequest.of(page-1,size);
         }
 
-        return ResponseEntity.status(200).body(candidateService.getAll(pageableObj,search,fetchAll,jobCreatedBy));
+        return ResponseEntity.status(200).body(candidateService.getAll(pageableObj,search,fetchAll,jobCreatedBy,isAdmin));
     }
 
     @GetMapping("/get/userId")

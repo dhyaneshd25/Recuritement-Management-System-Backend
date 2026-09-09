@@ -41,7 +41,8 @@ public class InterviewController {
         @RequestParam(defaultValue="-1",name="page") int page,
         @RequestParam(defaultValue="10",name="size") int size,
         @RequestParam(defaultValue="",name="search") String search,
-        @RequestParam(defaultValue="",name="candidateCreatedBy", required = false) String candidateCreatedBy
+        @RequestParam(defaultValue="",name="candidateCreatedBy", required = false) String candidateCreatedBy,
+        @RequestParam(defaultValue="true",name="isAdmin",required = false) boolean isAdmin
     ) {
         boolean fetchAll = (page == 0 && size == 10);
 
@@ -53,7 +54,7 @@ public class InterviewController {
             pageableObj = PageRequest.of(page-1,size);
         }
 
-        return ResponseEntity.status(200).body(interviewService.getAll(pageableObj,search,fetchAll,candidateCreatedBy));
+        return ResponseEntity.status(200).body(interviewService.getAll(pageableObj,search,fetchAll,candidateCreatedBy,isAdmin));
     }
 
     @GetMapping("/get/candidateUserId")

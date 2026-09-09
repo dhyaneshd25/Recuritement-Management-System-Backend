@@ -65,4 +65,37 @@ public interface InterviewRepository extends MongoRepository<Interview, String> 
            "{ 'interviewDate': { $regex: ?0, $options: 'i' } } " +
            "] }")
     Page<Interview> searchInterview(String search, String candidateCreatedBy, Pageable pageable);
+
+    @Query("{ " +
+           "  '$or': [ " +
+           "{ 'candidateName': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'candidateId': { $regex: ?0, $options: 'i' } }, " +
+
+           "{ 'interviewerName': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'interviewerId': { $regex: ?0, $options: 'i' } }, " +
+
+           "{ 'mode': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'status': { $regex: ?0, $options: 'i' } }, " +
+
+           "{ 'interviewDate': { $regex: ?0, $options: 'i' } } " +
+           "] }")
+    List<Interview> searchInterviewWithoutPagination(String search);
+
+
+    
+    @Query("{ " +
+           "  '$or': [ " +
+           "{ 'candidateName': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'candidateId': { $regex: ?0, $options: 'i' } }, " +
+
+           "{ 'interviewerName': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'interviewerId': { $regex: ?0, $options: 'i' } }, " +
+
+           "{ 'mode': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'status': { $regex: ?0, $options: 'i' } }, " +
+
+           "{ 'interviewDate': { $regex: ?0, $options: 'i' } } " +
+           "] }")
+    Page<Interview> searchInterview(String search, Pageable pageable);
+
 }

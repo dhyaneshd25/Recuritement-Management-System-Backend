@@ -42,17 +42,26 @@ public class JobService {
     }
 
 
-    public PageResponse<JobResponse> getAll(Pageable pageable,String search,boolean fetchAll,String createdBy){
+    public PageResponse<JobResponse> getAll(Pageable pageable,String search,boolean fetchAll,String createdBy,boolean isAdmin){
 
         List<Job> jobs;
 
         Page<Job> pages = null;
 
-        if(fetchAll){
-            jobs = jobRepository.searchJobsWithoutPagination(search,createdBy);
+        if(isAdmin){
+            if(fetchAll){
+                jobs = jobRepository.searchJobsWithoutPagination(search);
+            }else{
+                pages = jobRepository.searchJobs(search, pageable);
+                jobs = pages.getContent();
+            }
         }else{
-            pages = jobRepository.searchJobs(search, createdBy, pageable);
-            jobs = pages.getContent();
+            if(fetchAll){
+                jobs = jobRepository.searchJobsWithoutPagination(search,createdBy);
+            }else{
+                pages = jobRepository.searchJobs(search, createdBy, pageable);
+                jobs = pages.getContent();
+            }
         }
 
         // Page<Job> pages = jobRepository.findAll(pageable);

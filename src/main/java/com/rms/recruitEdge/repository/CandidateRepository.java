@@ -54,4 +54,22 @@ public interface CandidateRepository extends MongoRepository<Candidate, String> 
            "] }")
     Page<Candidate> searchCandidates(String search, String jobCreatedBy, Pageable pageable);
 
+
+    @Query("{ " +
+           "  '$or': [ " +
+           "{ 'userName': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'jobTitle': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'status': { $regex: ?0, $options: 'i' } } " +
+           "] }")
+    List<Candidate> searchCandidatesWithoutPagination(String search);
+
+
+    @Query("{ " +
+           "  '$or': [ " +
+           "{ 'userName': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'jobTitle': { $regex: ?0, $options: 'i' } }, " +
+           "{ 'status': { $regex: ?0, $options: 'i' } } " +
+           "] }")
+    Page<Candidate> searchCandidates(String search, Pageable pageable);    
+
 }

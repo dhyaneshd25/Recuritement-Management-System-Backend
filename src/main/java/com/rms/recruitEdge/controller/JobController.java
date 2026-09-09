@@ -40,7 +40,8 @@ public class JobController {
         @RequestParam(defaultValue="0",name="page") int page,
         @RequestParam(defaultValue="10",name="size") int size,
         @RequestParam(defaultValue="",name="search") String search,
-        @RequestParam(defaultValue="",name="createdBy",required = false) String createdBy
+        @RequestParam(defaultValue="",name="createdBy",required = false) String createdBy,
+        @RequestParam(defaultValue="true",name="isAdmin",required = false) boolean isAdmin
     ){
         boolean fetchAll = (page == 0 && size == 10);
 
@@ -52,7 +53,7 @@ public class JobController {
             pageableObj = PageRequest.of(page-1,size);
         }
 
-        return ResponseEntity.status(200).body(jobService.getAll(pageableObj,search,fetchAll,createdBy));
+        return ResponseEntity.status(200).body(jobService.getAll(pageableObj,search,fetchAll,createdBy,isAdmin));
     }
 
 

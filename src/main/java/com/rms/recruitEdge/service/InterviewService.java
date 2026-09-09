@@ -39,18 +39,29 @@ public class InterviewService {
         return toInterviewResponse(saveInterview);
     }
 
-    public PageResponse<InterviewResponse> getAll(Pageable pageable,String search,boolean fetchAll,String candidateCreatedBy){
+    public PageResponse<InterviewResponse> getAll(Pageable pageable,String search,boolean fetchAll,String candidateCreatedBy,boolean isAdmin){
 
         List<Interview> interviews;
 
         Page<Interview> pages = null;
 
-        if(fetchAll){
-            interviews = interviewRepository.searchInterviewWithoutPagination(search, candidateCreatedBy);
+        if(isAdmin){
+            if(fetchAll){
+                interviews = interviewRepository.searchInterviewWithoutPagination(search);
+            }else{
+                pages = interviewRepository.searchInterview(search, pageable);
+                interviews = pages.getContent();
+            }
         }else{
-            pages = interviewRepository.searchInterview(search, candidateCreatedBy, pageable);
-            interviews = pages.getContent();
+
+            if(fetchAll){
+                interviews = interviewRepository.searchInterviewWithoutPagination(search, candidateCreatedBy);
+            }else{
+                pages = interviewRepository.searchInterview(search, candidateCreatedBy, pageable);
+                interviews = pages.getContent();
+            }
         }
+
 
         PageResponse<InterviewResponse> res = new PageResponse<>();
 

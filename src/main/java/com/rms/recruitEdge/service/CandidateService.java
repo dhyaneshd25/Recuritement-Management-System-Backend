@@ -41,18 +41,28 @@ public class CandidateService {
         return toCandidateResponse(saveCandidate);
     }
 
-    public PageResponse<CandidateResponse> getAll(Pageable pageable,String search,boolean fetchAll, String jobCreatedBy){
+    public PageResponse<CandidateResponse> getAll(Pageable pageable,String search,boolean fetchAll, String jobCreatedBy, boolean isAdmin){
 
         List<Candidate> candidates;
 
         Page<Candidate> pages = null;
 
-        if(fetchAll){
-            candidates = candidateRepository.searchCandidatesWithoutPagination(search, jobCreatedBy);
+        if(isAdmin){
+            if(fetchAll){
+                candidates = candidateRepository.searchCandidatesWithoutPagination(search);
+            }else{
+                pages = candidateRepository.searchCandidates(search, pageable);
+                candidates = pages.getContent();
+            }
         }else{
-            pages = candidateRepository.searchCandidates(search, jobCreatedBy, pageable);
-            candidates = pages.getContent();
+            if(fetchAll){
+                candidates = candidateRepository.searchCandidatesWithoutPagination(search, jobCreatedBy);
+            }else{
+                pages = candidateRepository.searchCandidates(search, jobCreatedBy, pageable);
+                candidates = pages.getContent();
+            }
         }
+
 
         // Page<Job> pages = jobRepository.findAll(pageable);
 
