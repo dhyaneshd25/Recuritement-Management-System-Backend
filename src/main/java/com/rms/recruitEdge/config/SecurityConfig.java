@@ -50,7 +50,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/auth/googleLogin","/api/auth/login", "/api/auth/googleRegister", "/api/auth/register").permitAll()
+                    .requestMatchers("/api/auth/googleLogin","/api/auth/login", "/api/auth/googleRegister", "/api/auth/register", "/api/auth/refresh").permitAll()
                     .anyRequest().authenticated()
             )
             .sessionManagement(session ->

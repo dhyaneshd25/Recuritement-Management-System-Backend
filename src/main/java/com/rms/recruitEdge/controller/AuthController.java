@@ -45,4 +45,10 @@ public class AuthController {
 
         return authService.loginWithGoogle(req);
     }
+
+    @PostMapping("/refresh")
+    public AuthResponse getRefToken(@RequestBody String refreshToken){
+        return authService.refreshAccessToken(refreshToken);
+    }
+
 }
