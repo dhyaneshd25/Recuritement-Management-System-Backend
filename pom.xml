@@ -29,6 +29,27 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
+	<!--
+	  This block is NEW and is what was missing. It does not declare an
+	  actual dependency to include in the build - it only tells Maven
+	  "when something below asks for org.springframework.ai:*, use the
+	  versions defined by spring-ai-bom:2.0.0". scope=import is only
+	  legal here, inside dependencyManagement - that's why it errored
+	  when it was down in the plain <dependencies> block.
+	-->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.ai</groupId>
+				<artifactId>spring-ai-bom</artifactId>
+				<version>2.0.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 
  
@@ -99,12 +120,23 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
+		<!-- No <version> here - spring-ai-bom above supplies it -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-model-google-genai</artifactId>
+		</dependency>
 
 	
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>me.paulschwarz</groupId>
+			<artifactId>springboot3-dotenv</artifactId>
+			<version>5.1.0</version>
 		</dependency>
 
 	</dependencies>
